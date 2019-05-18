@@ -1,6 +1,5 @@
 ﻿using IamApp.Domain;
 using IamApp.Dtos;
-using IamApp.Extensions;
 using IamApp.Repositories;
 using IamApp.Utils;
 using Microsoft.AspNetCore.Authorization;
@@ -27,7 +26,6 @@ namespace IamApp.Controllers
             _userRepository = (UserRepository)userRepository;
         }
 
-        [AllowAnonymous] //TEMP
         [HttpGet]
         public ActionResult GetAll()
         {
@@ -55,6 +53,7 @@ namespace IamApp.Controllers
 
                 return Ok(new
                 {
+                    message = "Login successful!",
                     user.Id,
                     user.Username,
                     user.Email,
@@ -81,7 +80,7 @@ namespace IamApp.Controllers
 
                 _userRepository.Save(user);
 
-                return Ok();
+                return Ok(new { message = "Account successfully created!" });
             }
             catch (Exception ex)
             {
