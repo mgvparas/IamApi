@@ -9,8 +9,7 @@ namespace IamApp.Controllers
         [HttpPost("register")]
         public ActionResult Register()
         {
-
-            return Ok("Hello from /user/register");
+            return CreatedAtAction("TestMethod", "Hello from /user/register");
         }
     }
 }
