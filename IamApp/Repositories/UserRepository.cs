@@ -2,6 +2,7 @@
 using IamApp.Extensions;
 using IamApp.Utils;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 
@@ -15,6 +16,8 @@ namespace IamApp.Repositories
         {
             _context = context;
         }
+
+        public List<User> GetAll() => _context.Users.ToList();
 
         public User GetById(Guid id) => _context.Users.Find(id);
 

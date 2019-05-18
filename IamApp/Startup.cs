@@ -32,7 +32,7 @@ namespace IamApp
             var appSettings = appSettingsSection.Get<AppSettings>();
 
             services.AddCors();
-            services.AddDbContext<DataContext>(x => x.UseSqlServer(appSettings.DatabaseName));
+            services.AddDbContext<DataContext>(x => x.UseInMemoryDatabase(appSettings.DatabaseName));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             // configure jwt authentication

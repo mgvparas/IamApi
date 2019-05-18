@@ -8,23 +8,36 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System;
 using System.Diagnostics.Contracts;
+using System.Linq;
 
 namespace IamApp.Controllers
 {
     [Authorize]
-    [Route("api/user")]
+    [Route("api/users")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class UsersController : ControllerBase
     {
         private readonly AppSettings _appSettings;
         private readonly IUserRepository _userRepository;
 
-        public UserController(
+        public UsersController(
             IUserRepository userRepository,
             IOptions<AppSettings> appSettings)
         {
             _appSettings = appSettings.Value;
             _userRepository = userRepository;
+        }
+
+        [HttpGet]
+        public ActionResult GetAll()
+        {
+            var users = _userRepository.GetAll();
+            //var userDtos = _mapper.Map<IList<UserDto>>(users);
+            return Ok(users.Select(user => new {
+                user.Id,
+                user.Username,
+                user.Email,
+            }));
         }
 
         [AllowAnonymous]
