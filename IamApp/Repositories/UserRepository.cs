@@ -33,7 +33,7 @@ namespace IamApp.Repositories
 
         public User Authenticate(string username, string password)
         {
-            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password)) return null;
+            if (username.IsNullOrWhiteSpace() || password.IsNullOrWhiteSpace()) return null;
 
             var user = _context.Users.SingleOrDefault(x => x.Username == username);
 
