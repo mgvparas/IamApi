@@ -1,28 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IamApp.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/values")]
     [ApiController]
+    [Authorize(Roles = "Administrator")]
     public class ValuesController : ControllerBase
     {
         // GET api/values
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
+        public ActionResult<IEnumerable<string>> Get() => new string[] { "value1", "value2" };
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
-        {
-            return "value";
-        }
+        public ActionResult<string> Get(int id) => "value";
 
         // POST api/values
         [HttpPost]
