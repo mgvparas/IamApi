@@ -23,7 +23,7 @@ namespace IamApp.Repositories
 
         public User Save(User user)
         {
-            Contract.Requires(!_context.Users.Any(x => x.Username == user.Username), "Username is already taken.");
+            if (_context.Users.Any(x => x.Username == user.Username)) throw new Exception("Username is already taken.");
 
             _context.Users.Add(user);
             _context.SaveChanges();
@@ -33,7 +33,8 @@ namespace IamApp.Repositories
 
         public User Authenticate(string username, string password)
         {
-            if (username.IsNullOrWhiteSpace() || password.IsNullOrWhiteSpace()) return null;
+            if (username.IsNullOrWhiteSpace()) throw new Exception("Username is required.");
+            if (password.IsNullOrWhiteSpace()) throw new Exception("Password is required.");
 
             var user = _context.Users.SingleOrDefault(x => x.Username == username);
 
@@ -50,9 +51,9 @@ namespace IamApp.Repositories
 
         private static bool PasswordHashIsVerified(string password, byte[] storedHash, byte[] storedSalt)
         {
-            Contract.Requires(!password.IsNullOrWhiteSpace(), "Password should contain at least one(1) character.");
-            Contract.Requires(storedHash.Length == 64, "Password hash should be 64 bytes.");
-            Contract.Requires(storedSalt.Length == 128, "Password salt should be 128 bytes.");
+            if (password.IsNullOrWhiteSpace()) throw new Exception("Password should contain at least one(1) character.");
+            if (storedHash.Length != 64) throw new Exception("Password hash should be 64 bytes.");
+            if (storedSalt.Length != 128) throw new Exception( "Password salt should be 128 bytes.");
 
             using (var hmac = new System.Security.Cryptography.HMACSHA512(storedSalt))
             {

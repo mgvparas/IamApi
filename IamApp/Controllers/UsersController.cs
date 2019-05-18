@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System;
-using System.Diagnostics.Contracts;
 using System.Linq;
 
 namespace IamApp.Controllers
@@ -45,33 +44,33 @@ namespace IamApp.Controllers
         [HttpPost("login")]
         public ActionResult Login(LoginUserDto userDto)
         {
-            if (userDto.Username.IsNullOrWhiteSpace()) return BadRequest(new { message = "Username is required." });
-            if (userDto.Password.IsNullOrWhiteSpace()) return BadRequest(new { message = "Password is required." });
-
-            var user = _userRepository.Authenticate(
-                userDto.Username,
-                userDto.Password
-            );
-
-            if (user == null) return BadRequest(new { message = "Username or password is incorrect." });
-
-            return Ok(new
+            try
             {
-                user.Id,
-                user.Username,
-                user.Email,
-                Token = new TokenGenerator().GenerateToken(_appSettings.Secret, user.Id)
-            });
+                var user = _userRepository.Authenticate(
+                    userDto.Username,
+                    userDto.Password
+                );
+
+                if (user == null) return BadRequest(new { message = "Username or password is incorrect." });
+
+                return Ok(new
+                {
+                    user.Id,
+                    user.Username,
+                    user.Email,
+                    Token = new TokenGenerator().GenerateToken(_appSettings.Secret, user.Id)
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
         [AllowAnonymous]
         [HttpPost("register")]
         public ActionResult Register([FromBody]RegistrationUserDto userDto)
         {
-            if (userDto.Username.IsNullOrWhiteSpace()) return BadRequest(new { message = "Username is required." });
-            if (userDto.Password.IsNullOrWhiteSpace()) return BadRequest(new { message = "Password is required." });
-            if (userDto.Email.IsNullOrWhiteSpace()) return BadRequest(new { message = "Email is required." });
-
             try
             {
                 var user = new User(

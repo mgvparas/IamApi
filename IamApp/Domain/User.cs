@@ -8,6 +8,10 @@ namespace IamApp.Domain
     {
         public User(string username, string password, string email)
         {
+            if (username.IsNullOrWhiteSpace()) throw new Exception("Username is required.");
+            if (password.IsNullOrWhiteSpace()) throw new Exception("Password is required.");
+            if (email.IsNullOrWhiteSpace()) throw new Exception("Email is required.");
+
             Username = username;
             Password = password;
             Email = email;
@@ -31,7 +35,7 @@ namespace IamApp.Domain
 
         private static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
-            Contract.Requires(!password.IsNullOrWhiteSpace(), "Password should contain at least one(1) character.");
+            if (password.IsNullOrWhiteSpace()) throw new Exception("Password is required.");
 
             using (var hmac = new System.Security.Cryptography.HMACSHA512())
             {
