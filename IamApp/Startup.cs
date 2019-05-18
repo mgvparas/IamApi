@@ -1,11 +1,16 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using IamApp.Repositories;
+using IamApp.Utils;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using System;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace IamApp
 {
@@ -21,27 +26,57 @@ namespace IamApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var securityKey = "`1234567890-=~!@#$%^&*()_=qwertyuiop[]\\{}|asdfghjkl;:\"'zxcvbnm,./<>?";
-            var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(securityKey));
+            // configure strongly typed settings objects
+            var appSettingsSection = Configuration.GetSection("AppSettings");
+            services.Configure<AppSettings>(appSettingsSection);
+            var appSettings = appSettingsSection.Get<AppSettings>();
 
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options => 
+            services.AddCors();
+            services.AddDbContext<DataContext>(x => x.UseSqlServer(appSettings.DatabaseName));
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            // configure jwt authentication
+            var securityKey = Encoding.ASCII.GetBytes(appSettings.Secret);
+
+            services
+                .AddAuthentication(x =>
                 {
-                    // TODO: values should be in a config file, or better yet, in the environment
+                    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddJwtBearer(options =>
+                {
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnTokenValidated = context =>
+                        {
+                            var userService = context.HttpContext.RequestServices.GetRequiredService<IUserRepository>();
+                            var userId = Guid.Parse(context.Principal.Identity.Name);
+                            var user = userService.GetById(userId);
+                            if (user == null)
+                            {
+                                // return unauthorized if user no longer exists
+                                context.Fail("Unauthorized");
+                            }
+                            return Task.CompletedTask;
+                        }
+                    };
+                    options.RequireHttpsMetadata = false;
+                    options.SaveToken = true;
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
-                        // what to validate
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
+                        // What to validate
                         ValidateIssuerSigningKey = true,
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
 
-                        // valid data
-                        ValidIssuer = "test.issuer",
-                        ValidAudience = "readers",
-                        IssuerSigningKey = symmetricSecurityKey
+                        // Valid data
+                        IssuerSigningKey = new SymmetricSecurityKey(securityKey),
                     };
                 });
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            // Configure DI for application repositories
+            services.AddScoped<IUserRepository, UserRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -60,6 +95,12 @@ namespace IamApp
             app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseMvc();
+
+            // global cors policy
+            app.UseCors(x => x
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace IamApp.Dtos
 {
-    public class RegisterDto
+    public class LoginUserDto
     {
         public string Username { get; set; }
 

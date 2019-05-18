@@ -1,15 +1,43 @@
-﻿namespace IamApp.Domain
+﻿using IamApp.Extensions;
+using System;
+using System.Diagnostics.Contracts;
+
+namespace IamApp.Domain
 {
     public class User
     {
-        public User(string username, string password)
+        public User(string username, string password, string email)
         {
             Username = username;
             Password = password;
+            Email = email;
+
+            CreatePasswordHash(password, out var passwordHash, out var passwordSalt);
+            PasswordHash = passwordHash;
+            PasswordSalt = passwordSalt;
         }
+
+        public Guid Id { get; private set; }
 
         public string Username { get; private set; }
 
         public string Password { get; private set; }
+
+        public string Email { get; private set; }
+
+        public byte[] PasswordHash { get; internal set; }
+
+        public byte[] PasswordSalt { get; internal set; }
+
+        private static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+        {
+            Contract.Requires(!password.IsNullOrWhiteSpace(), "Password should contain at least one(1) character.");
+
+            using (var hmac = new System.Security.Cryptography.HMACSHA512())
+            {
+                passwordSalt = hmac.Key;
+                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+            }
+        }
     }
 }
