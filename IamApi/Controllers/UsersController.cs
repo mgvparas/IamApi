@@ -1,14 +1,14 @@
-﻿using IamApp.Domain;
-using IamApp.Dtos;
-using IamApp.Repositories;
-using IamApp.Utils;
+﻿using IamApi.Domain;
+using IamApi.Dtos;
+using IamApi.Repositories;
+using IamApi.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System;
 using System.Linq;
 
-namespace IamApp.Controllers
+namespace IamApi.Controllers
 {
     [Authorize]
     [Route("api/users")]

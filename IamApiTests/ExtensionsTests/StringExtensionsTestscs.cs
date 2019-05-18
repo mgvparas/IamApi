@@ -1,7 +1,7 @@
-﻿using IamApp.Extensions;
+﻿using IamApi.Extensions;
 using Xunit;
 
-namespace IamAppTests.ExtensionsTests
+namespace IamApiTests.ExtensionsTests
 {
     public class StringExtensionsTestscs
     {

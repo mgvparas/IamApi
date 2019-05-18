@@ -1,4 +1,4 @@
-﻿namespace IamApp.Dtos
+﻿namespace IamApi.Dtos
 {
     public class LoginUserDto
     {

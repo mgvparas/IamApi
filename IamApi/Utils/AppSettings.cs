@@ -1,4 +1,4 @@
-﻿namespace IamApp.Utils
+﻿namespace IamApi.Utils
 {
     public class AppSettings
     {

@@ -16,7 +16,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "IamApp": {
+    "IamApi": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "api/values",

@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace IamApp.Controllers
+namespace IamApi.Controllers
 {
     [Route("api/values")]
     [ApiController]

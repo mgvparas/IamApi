@@ -1,12 +1,12 @@
-﻿using IamApp.Domain;
-using IamApp.Extensions;
-using IamApp.Utils;
+﻿using IamApi.Domain;
+using IamApi.Extensions;
+using IamApi.Utils;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 
-namespace IamApp.Repositories
+namespace IamApi.Repositories
 {
     internal class UserRepository : IUserRepository
     {

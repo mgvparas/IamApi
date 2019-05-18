@@ -1,5 +1,5 @@
-﻿using IamApp.Repositories;
-using IamApp.Utils;
+﻿using IamApi.Repositories;
+using IamApi.Utils;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -12,7 +12,7 @@ using System;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IamApp
+namespace IamApi
 {
     public class Startup
     {

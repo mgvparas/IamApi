@@ -1,4 +1,4 @@
-﻿namespace IamApp.Extensions
+﻿namespace IamApi.Extensions
 {
     public static class StringExtensions
     {

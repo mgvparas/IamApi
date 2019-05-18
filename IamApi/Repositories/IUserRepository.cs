@@ -1,8 +1,8 @@
-﻿using IamApp.Domain;
+﻿using IamApi.Domain;
 using System;
 using System.Collections.Generic;
 
-namespace IamApp.Repositories
+namespace IamApi.Repositories
 {
     public interface IUserRepository
     {

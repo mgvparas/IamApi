@@ -17,10 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\IamApp\IamApp.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Reference Include="Microsoft.AspNetCore.Mvc.Core">
       <HintPath>C:\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.aspnetcore.mvc.core\2.2.0\lib\netstandard2.0\Microsoft.AspNetCore.Mvc.Core.dll</HintPath>
     </Reference>
@@ -28,6 +24,10 @@
 
   <ItemGroup>
     <Folder Include="RepositoriesTests\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\IamApi\IamApi.csproj" />
   </ItemGroup>
 
 </Project>

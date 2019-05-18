@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.645
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IamApp", "IamApp\IamApp.csproj", "{7B1A75CB-81AF-4D2B-8889-BD341DAE7582}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IamApi", "IamApi\IamApi.csproj", "{7B1A75CB-81AF-4D2B-8889-BD341DAE7582}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IamAppTests", "IamAppTests\IamAppTests.csproj", "{DE612A57-2B2C-408D-B742-C769B98CA3BA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IamApiTests", "IamApiTests\IamApiTests.csproj", "{DE612A57-2B2C-408D-B742-C769B98CA3BA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,10 +1,10 @@
-using IamApp.Controllers;
-using IamApp.Dtos;
+using IamApi.Controllers;
+using IamApi.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using Xunit;
 
-namespace IamAppTests
+namespace IamApiTests
 {
     public class UserControllerTests
     {

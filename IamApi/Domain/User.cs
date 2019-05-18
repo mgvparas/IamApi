@@ -1,8 +1,8 @@
-﻿using IamApp.Extensions;
+﻿using IamApi.Extensions;
 using System;
 using System.Diagnostics.Contracts;
 
-namespace IamApp.Domain
+namespace IamApi.Domain
 {
     public class User
     {

@@ -1,7 +1,7 @@
-﻿using IamApp.Domain;
+﻿using IamApi.Domain;
 using Microsoft.EntityFrameworkCore;
 
-namespace IamApp.Utils
+namespace IamApi.Utils
 {
     public class DataContext : DbContext
     {
