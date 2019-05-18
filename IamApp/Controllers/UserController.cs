@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using IamApp.Domain;
+using IamApp.Dtos;
+using IamApp.Repositories;
+using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace IamApp.Controllers
 {
@@ -6,10 +10,31 @@ namespace IamApp.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        [HttpPost("register")]
-        public ActionResult Register()
+        public UserController(UserRepository userRepository)
         {
-            return CreatedAtAction("TestMethod", "Hello from /user/register");
+            UserRepository = userRepository;
+        }
+
+        protected UserRepository UserRepository { get; private set; }
+
+        [HttpPost("register")]
+        public ActionResult Register([FromBody]RegisterDto registerDto)
+        {
+            try
+            {
+                var user = new User(
+                    registerDto.Username,
+                    registerDto.Password
+                );
+
+                UserRepository.Save(user);
+
+                return Ok();
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            };
         }
     }
 }
