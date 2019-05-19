@@ -3,8 +3,9 @@ using IamApi.Extensions;
 using IamApi.Utils;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace IamApi.Repositories
 {
@@ -23,7 +24,7 @@ namespace IamApi.Repositories
 
         public User Save(User user)
         {
-            if (_context.Users.Any(x => x.Username == user.Username)) throw new Exception("Username is already taken.");
+            if (_context.Users.Any(x => x.Email == user.Email)) throw new Exception("Email is already taken.");
 
             _context.Users.Add(user);
             _context.SaveChanges();
@@ -31,12 +32,12 @@ namespace IamApi.Repositories
             return user;
         }
 
-        public User Authenticate(string username, string password)
+        public User Authenticate(string email, string password)
         {
-            if (username.IsNullOrWhiteSpace()) throw new Exception("Username is required.");
+            if (email.IsNullOrWhiteSpace()) throw new Exception("Email is required.");
             if (password.IsNullOrWhiteSpace()) throw new Exception("Password is required.");
 
-            var user = _context.Users.SingleOrDefault(x => x.Username == username);
+            var user = _context.Users.SingleOrDefault(x => x.Email == email);
 
             if (user == null) return null;
 
@@ -55,9 +56,9 @@ namespace IamApi.Repositories
             if (storedHash.Length != 64) throw new Exception("Password hash should be 64 bytes.");
             if (storedSalt.Length != 128) throw new Exception( "Password salt should be 128 bytes.");
 
-            using (var hmac = new System.Security.Cryptography.HMACSHA512(storedSalt))
+            using (var hmac = new HMACSHA512(storedSalt))
             {
-                var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+                var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
                 for (var i = 0; i < computedHash.Length; i++)
                 {
                     if (computedHash[i] != storedHash[i]) return false;

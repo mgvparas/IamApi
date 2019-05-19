@@ -9,7 +9,7 @@ namespace IamApi.Utils
 {
     public class TokenGenerator
     {
-        internal string GenerateToken(string securityKey, Guid userId)
+        public string GenerateToken(string securityKey, Guid userId)
         {
             var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(securityKey));
             var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256Signature);

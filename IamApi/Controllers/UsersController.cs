@@ -30,10 +30,9 @@ namespace IamApi.Controllers
         public ActionResult GetAll()
         {
             var users = _userRepository.GetAll();
-            //var userDtos = _mapper.Map<IList<UserDto>>(users);
+
             return Ok(users.Select(user => new {
                 user.Id,
-                user.Username,
                 user.Email,
             }));
         }
@@ -45,17 +44,16 @@ namespace IamApi.Controllers
             try
             {
                 var user = _userRepository.Authenticate(
-                    userDto.Username,
+                    userDto.Email,
                     userDto.Password
                 );
 
-                if (user == null) return BadRequest(new { message = "Username or password is incorrect." });
+                if (user == null) return BadRequest(new { message = "Email or password is incorrect." });
 
                 return Ok(new
                 {
                     message = "Login successful!",
                     user.Id,
-                    user.Username,
                     user.Email,
                     Token = new TokenGenerator().GenerateToken(_appSettings.Secret, user.Id)
                 });
@@ -73,9 +71,28 @@ namespace IamApi.Controllers
             try
             {
                 var user = new User(
-                    userDto.Username,
-                    userDto.Password,
-                    userDto.Email
+                    userDto.Email,
+                    userDto.Password
+                );
+
+                _userRepository.Save(user);
+
+                return Ok(new { message = "Account successfully created!" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            };
+        }
+
+        [HttpPost("updatePassword")]
+        public ActionResult UpdatePassword([FromBody]RegistrationUserDto userDto)
+        {
+            try
+            {
+                var user = new User(
+                    userDto.Email,
+                    userDto.Password
                 );
 
                 _userRepository.Save(user);

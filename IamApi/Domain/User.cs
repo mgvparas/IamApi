@@ -1,18 +1,15 @@
 ﻿using IamApi.Extensions;
 using System;
-using System.Diagnostics.Contracts;
 
 namespace IamApi.Domain
 {
     public class User
     {
-        public User(string username, string password, string email)
+        public User(string email, string password)
         {
-            if (username.IsNullOrWhiteSpace()) throw new Exception("Username is required.");
-            if (password.IsNullOrWhiteSpace()) throw new Exception("Password is required.");
             if (email.IsNullOrWhiteSpace()) throw new Exception("Email is required.");
+            if (password.IsNullOrWhiteSpace()) throw new Exception("Password is required.");
 
-            Username = username;
             Password = password;
             Email = email;
 
@@ -23,11 +20,9 @@ namespace IamApi.Domain
 
         public Guid Id { get; private set; }
 
-        public string Username { get; private set; }
+        public string Email { get; private set; }
 
         public string Password { get; private set; }
-
-        public string Email { get; private set; }
 
         public byte[] PasswordHash { get; internal set; }
 
